@@ -24,14 +24,6 @@ if __name__ == '__main__':
     parser.add_argument('-i', '--input', type=str, help='The input file being used (if any)',
                         required=False, default='')
     
-    """
-    if len(sys.argv) < 3:
-        sys.stderr.write("Usage: {} <root> <pathtoinput>\n".format(sys.argv[0]))
-        sys.exit(1)
-
-    root = sys.argv[1]
-    inpath = sys.argv[2]
-    """
     args = parser.parse_args()
     root = args.root;
     inpath = args.input
@@ -40,6 +32,7 @@ if __name__ == '__main__':
     executable = args.name
     output = args.out
     for dirpath, dirnames, filenames in os.walk(root):
+        #Found the directory with the executable, run it & save output.
         if executable in filenames:
             try:
                 cmd = "{}/{} {}".format(dirpath, executable, inpath)
@@ -49,11 +42,3 @@ if __name__ == '__main__':
             except subprocess.CalledProcessError as cpe:
                 with open(os.path.join(dirpath, "error"), "w") as errfile:
                     errfile.write(cpe.output)
-            #TODO: Probably don't need to do this.
-            """
-            try:
-                print(subprocess.check_output("dos2unix {}/myout".format(dirpath), shell=True))
-            except subprocess.CalledProcessError as cpe:
-                with open(os.path.join(dirpath, "dos2unixerror"), "w") as errfile:
-                    errfile.write(cpe.output)
-            """
