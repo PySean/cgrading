@@ -92,4 +92,4 @@ if __name__ == '__main__':
                 error = subprocess.check_output(cmd_cpy.split(), stderr=STDOUT)
             except subprocess.CalledProcessError as cpe:
                 with open(os.path.join(dirpath, "error"), "w") as errfile:
-                    errfile.write(cpe.output)
+                    errfile.write(str(cpe.output))
