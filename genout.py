@@ -41,5 +41,5 @@ if __name__ == '__main__':
                 with open(os.path.join(dirpath, output), 'w') as outfile:
                     outfile.write(outed)
             except subprocess.CalledProcessError as cpe:
-                with open(os.path.join(dirpath, "error"), "w") as errfile:
-                    errfile.write(str(cpe.output, encoding='ASCII'))
+                with open(os.path.join(dirpath, "runtime_error"), "w") as errfile:
+                    errfile.write(str(cpe.output, encoding='UTF-8'))
