@@ -4,6 +4,7 @@
 """
     "genout.py", by Sean Soderman
     Generates output from executables within student directories.
+    Can deal with arbitrarily nested directories.
 """
 import sys
 import subprocess
@@ -41,4 +42,4 @@ if __name__ == '__main__':
                     outfile.write(outed)
             except subprocess.CalledProcessError as cpe:
                 with open(os.path.join(dirpath, "error"), "w") as errfile:
-                    errfile.write(str(cpe.output))
+                    errfile.write(str(cpe.output, encoding='ASCII'))

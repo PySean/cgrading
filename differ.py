@@ -38,4 +38,4 @@ if __name__ == '__main__':
             #So only generate a file when an "error" is caught.
             except subprocess.CalledProcessError as cpe:
                 with open(os.path.join(dirpath, 'check.diff'), 'w') as errfile:
-                    errfile.write(str(cpe.output))
+                    errfile.write(str(cpe.output, encoding='ASCII'))
