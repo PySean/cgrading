@@ -56,7 +56,9 @@ if __name__ == '__main__':
                     os.link(header, os.path.join(dirpath, header))
             error = ""
             #Collapse c source code files into string then format it all up.
-            c_files = ' '.join(code_dir + args.other_files)
+            #Merge duplicate files together as well to avoid compilation
+            #conflicts.
+            c_files = ' '.join(set(code_dir + args.other_files))
             cmd_cpy = cmdline.format(outdir=dirpath, name=args.name, 
                                      c_files=c_files)
             try:
