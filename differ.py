@@ -30,7 +30,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     studentout = args.name
     answerout = args.answerfile
-    command = 'diff -C 3 {} {}'
+    command = 'diff -tw -C 3 {} {}'
     for dirpath, dirnames, filenames in os.walk(args.root):
         if studentout in filenames:
             try:
