@@ -45,7 +45,9 @@ if __name__ == '__main__':
     #header = "/home/sean/classes/recitation/prgms/assign1/cs3723p1.h"
     #headers = ' '.join(parser.headers)
     for dirpath, dirnames, filenames in os.walk(args.root):
-        code_dir = [os.path.join(dirpath, x) for x in filenames if x.endswith('.c')]
+        #Include only the c programs that are not provided as aux. files.
+        code_dir = [os.path.join(dirpath, x) for x in filenames 
+                    if x.endswith('.c') and x not in args.other_files]
         headers = [x for x in filenames if x.endswith('.h')]
         #Is there source code within this directory?
         if len(code_dir) != 0:
@@ -56,9 +58,7 @@ if __name__ == '__main__':
                     os.link(header, os.path.join(dirpath, header))
             error = ""
             #Collapse c source code files into string then format it all up.
-            #Merge duplicate files together as well to avoid compilation
-            #conflicts.
-            c_files = ' '.join(set(code_dir + args.other_files))
+            c_files = ' '.join(code_dir + args.other_files)
             cmd_cpy = cmdline.format(outdir=dirpath, name=args.name, 
                                      c_files=c_files)
             try:
