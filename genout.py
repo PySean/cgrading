@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 
 """
@@ -10,7 +10,7 @@ import sys
 import subprocess
 import os
 import argparse
-from subprocess import STDOUT
+from subprocess import STDOUT, DEVNULL
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=('Runs executables within nested'
@@ -23,23 +23,28 @@ if __name__ == '__main__':
     parser.add_argument('-o', '--out', type=str, default='myout',
                         help='The name of the file to direct output to.')
     parser.add_argument('-i', '--input', type=str, help='The input file being used (if any)',
-                        required=False, default='')
+                        required=False, default=DEVNULL)
     
     args = parser.parse_args()
-    root = args.root;
-    inpath = args.input
-    #Don't want input redirection happening by default.
-    inpath =  '< ' + inpath if inpath != '' else inpath
+    root = args.root
+    #Basically the input file handle to use.
+    inpath = ''
     executable = args.name
     output = args.out
     for dirpath, dirnames, filenames in os.walk(root):
         #Found the directory with the executable, run it & save output.
         if executable in filenames:
+            #Have to reopen file handle for every execution.
             try:
-                cmd = "{}/{} {}".format(dirpath, executable, inpath)
-                outed = subprocess.check_output(cmd.split(), shell=True, stderr=STDOUT)
+                inpath = open(args.input, 'r')
+            except FileNotFoundError as f:
+                print(f)
+            try:
+                cmd = "{}".format(os.path.join(dirpath, executable))
+                outed = subprocess.check_output(cmd.split(), stderr=STDOUT,
+                                                stdin=inpath)
                 with open(os.path.join(dirpath, output), 'w') as outfile:
-                    outfile.write(outed)
+                    outfile.write(str(outed, encoding='UTF-8'))
             except subprocess.CalledProcessError as cpe:
                 with open(os.path.join(dirpath, "runtime_error"), "w") as errfile:
                     errfile.write(str(cpe.output, encoding='UTF-8'))
