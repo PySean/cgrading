@@ -25,10 +25,12 @@ if __name__ == '__main__':
                         required=True)
     parser.add_argument('-n', '--name', type=str, default='myout',
                         help='Name of student output file')
+    parser.add_argument('-d', '--diffile', type=str, default='check.diff',
+                        help='Name of diff output file.')
     args = parser.parse_args()
     studentout = args.name
     answerout = args.answerfile
-    command = 'diff {} {}'
+    command = 'diff -C 3 {} {}'
     for dirpath, dirnames, filenames in os.walk(args.root):
         if studentout in filenames:
             try:
@@ -37,5 +39,5 @@ if __name__ == '__main__':
             #Diff returns an error code of 1 if there is any difference.
             #So only generate a file when an "error" is caught.
             except subprocess.CalledProcessError as cpe:
-                with open(os.path.join(dirpath, 'check.diff'), 'w') as errfile:
+                with open(os.path.join(dirpath, args.diffile), 'w') as errfile:
                     errfile.write(str(cpe.output, encoding='UTF-8'))
