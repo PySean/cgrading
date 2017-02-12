@@ -43,8 +43,17 @@ if __name__ == '__main__':
                 cmd = "{}".format(os.path.join(dirpath, executable))
                 outed = subprocess.check_output(cmd.split(), stderr=STDOUT,
                                                 stdin=inpath)
-                with open(os.path.join(dirpath, output), 'w') as outfile:
-                    outfile.write(str(outed, encoding='UTF-8'))
+                print(dirpath)
+                try:
+                    outed = str(outed, encoding='UTF-8')
+                    #print(outed)
+                    with open(os.path.join(dirpath, output), 'w') as outfile:
+                        outfile.write(outed)#str(outed, encoding='UTF-8'))
+                except UnicodeDecodeError as ude:
+                    with open(os.path.join(dirpath, "output_error"), "w") as errfile:
+                        sys.stderr.write( ('Messed up output encountered for '
+                                           '{}\n'.format(dirpath)))
+                        errfile.write(str(ude))
             except subprocess.CalledProcessError as cpe:
                 with open(os.path.join(dirpath, "runtime_error"), "w") as errfile:
                     errfile.write(str(cpe.output, encoding='UTF-8'))
