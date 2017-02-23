@@ -18,10 +18,16 @@ if __name__ == '__main__':
     parser.add_argument('-r', '--root', type=str,
                         help='Root of directory tree containing student programs.',
                         required=True)
+
     parser.add_argument('-n', '--name', type=str, default='run',
                         help='The name of the executable to run.')
+
+    parser.add_argument('-c', '--cmdargs', type=str, nargs='*', default='',
+                        help='Arguments for the command to be run.')
+
     parser.add_argument('-o', '--out', type=str, default='myout',
                         help='The name of the file to direct output to.')
+
     parser.add_argument('-i', '--input', type=str, help='The input file being used (if any)',
                         required=False, default=DEVNULL)
     
@@ -40,7 +46,9 @@ if __name__ == '__main__':
             except FileNotFoundError as f:
                 print(f)
             try:
-                cmd = "{}".format(os.path.join(dirpath, executable))
+                cmdargs = args.cmdargs
+                cmdargstr = ' '.join(args.cmdargs)
+                cmd = "{} {}".format(os.path.join(dirpath, executable), cmdargstr)
                 outed = subprocess.check_output(cmd.split(), stderr=STDOUT,
                                                 stdin=inpath)
                 print(dirpath)
