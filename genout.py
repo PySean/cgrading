@@ -13,6 +13,9 @@ import argparse
 from subprocess import STDOUT, DEVNULL
 
 if __name__ == '__main__':
+    #NOTE: argparse cleanses command line switches it accepts from inputs. So if an
+    #assignment requires (for example) the -r switch, you have to change
+    #it to something else.
     parser = argparse.ArgumentParser(description=('Runs executables within nested'
                                                   'directories'))
     parser.add_argument('-r', '--root', type=str,
@@ -22,7 +25,7 @@ if __name__ == '__main__':
     parser.add_argument('-n', '--name', type=str, default='run',
                         help='The name of the executable to run.')
 
-    parser.add_argument('-c', '--cmdargs', type=str, nargs='*', default='',
+    parser.add_argument('-a', '--cmdargs', type=str, nargs='*', default='',
                         help='Arguments for the command to be run.')
 
     parser.add_argument('-o', '--out', type=str, default='myout',
@@ -41,17 +44,20 @@ if __name__ == '__main__':
         #Found the directory with the executable, run it & save output.
         if executable in filenames:
             #Have to reopen file handle for every execution.
-            try:
-                inpath = open(args.input, 'r')
-            except FileNotFoundError as f:
-                print(f)
+            if args.input != DEVNULL:
+                try:
+                    inpath = open(args.input, 'r')
+                except FileNotFoundError as f:
+                    print(f)
+            else:
+                inpath = args.input
             try:
                 cmdargs = args.cmdargs
                 cmdargstr = ' '.join(args.cmdargs)
                 cmd = "{} {}".format(os.path.join(dirpath, executable), cmdargstr)
+                sys.stderr.write(cmd)
                 outed = subprocess.check_output(cmd.split(), stderr=STDOUT,
                                                 stdin=inpath)
-                print(dirpath)
                 try:
                     outed = str(outed, encoding='UTF-8')
                     #print(outed)
