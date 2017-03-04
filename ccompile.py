@@ -15,7 +15,7 @@ from subprocess import STDOUT
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description=('Compiles C programs'
+    parser = argparse.ArgumentParser(description=('Compiles C programs '
                                                   'within nested directories'))
 
     parser.add_argument('-r', '--root', type=str,
@@ -32,7 +32,7 @@ if __name__ == '__main__':
                         required=False)
     parser.add_argument('-o', '--other_files', type=str, nargs='*',
                         help=('A list of c program files that are required for'
-                              ' compilation (i.e., driver program files.'),
+                              ' compilation (i.e., driver program files).'),
                         required=False)
 
     args = parser.parse_args()
