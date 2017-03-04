@@ -26,12 +26,17 @@ if __name__ == '__main__':
                         help='The name of the executable to run.')
 
     parser.add_argument('-a', '--cmdargs', type=str, nargs='*', default='',
-                        help='Arguments for the command to be run.')
+                        help=('Arguments for the executable to be run.'
+                               ' Specifically, these are what char * argv[] will'
+                               ' store upon execution for each program.')
 
     parser.add_argument('-o', '--out', type=str, default='myout',
                         help='The name of the file to direct output to.')
 
-    parser.add_argument('-i', '--input', type=str, help='The input file being used (if any)',
+    parser.add_argument('-i', '--input', type=str, 
+                        help=('The input file being used (if any).'
+                              ' Useful only if the input comes from stdin, otherwise'
+                              ' specify io files with the -a option instead'),
                         required=False, default=DEVNULL)
     
     args = parser.parse_args()
