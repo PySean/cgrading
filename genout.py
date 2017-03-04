@@ -28,7 +28,7 @@ if __name__ == '__main__':
     parser.add_argument('-a', '--cmdargs', type=str, nargs='*', default='',
                         help=('Arguments for the executable to be run.'
                                ' Specifically, these are what char * argv[] will'
-                               ' store upon execution for each program.')
+                               ' store upon execution for each program.'))
 
     parser.add_argument('-o', '--out', type=str, default='myout',
                         help='The name of the file to direct output to.')
