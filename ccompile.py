@@ -30,7 +30,7 @@ if __name__ == '__main__':
     parser.add_argument('--headers', type=str, nargs='*',
                         help='The header files required for compilation.',
                         required=False)
-    parser.add_argument('-o', '--other_files', type=str, nargs='*',
+    parser.add_argument('-o', '--other_files', type=str, nargs='*', default=[],
                         help=('A list of c program files that are required for'
                               ' compilation (i.e., driver program files).'),
                         required=False)
