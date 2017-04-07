@@ -38,7 +38,15 @@ if __name__ == '__main__':
                               ' Useful only if the input comes from stdin, otherwise'
                               ' specify io files with the -a option instead'),
                         required=False, default=DEVNULL)
-    
+    # Iterate through the argument list and select all options that
+    # aren't added to the parser itself. This is because I need to pass these
+    # arguments to the student programs.
+    exec_switches = []
+    # Add the switches in the order i see them...
+    exec_args = [x for x in sys.argv if x.startswith('-') and 
+                                       x not in '-r -n --cmdargs -o -i -h']
+    new_argv = [x for x in sys.argv if x not in exec_args]
+    sys.argv = new_argv
     args = parser.parse_args()
     root = args.root
     #Basically the input file handle to use.
@@ -57,8 +65,9 @@ if __name__ == '__main__':
             else:
                 inpath = args.input
             try:
-                cmdargs = args.cmdargs
-                cmdargstr = ' '.join(args.cmdargs)
+                # Stick the switches in with the normal command arguments.
+                cmdargs = exec_args.extend(args.cmdargs)
+                cmdargstr = ' '.join(exec_args)
                 cmd = "{} {}".format(os.path.join(dirpath, executable), cmdargstr)
                 sys.stderr.write(cmd)
                 outed = subprocess.check_output(cmd.split(), stderr=STDOUT,
